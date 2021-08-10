@@ -1,0 +1,20 @@
+{
+  "name": "zeew-levels",
+  "version": "1.0.0",
+  "description": "NPM de niveles para creadores de bots de discord.js u otros en español - #ZeewTEAM",
+  "main": "index.js",
+  "repository": "https://github.com/KamerrEzz/zeew-levels-npm",
+  "author": "kamerr ezz - <developer@kamerrezz.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {},
+  "devDependencies": {},
+  "keywords": [
+    "Zeew",
+    "ZeewApi",
+    "ZeewNiveles",
+    "Discord.js Niveles",
+    "Niveles bots discord",
+    "discord niveles español"
+  ]
+}
