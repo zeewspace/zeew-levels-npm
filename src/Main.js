@@ -36,7 +36,7 @@ module.exports.newLevel = (conexion, id, key) => {
             else {
                 if (res[0].xp > l) {
                     if(res[0].lvl === 0) res[0].lvl = 1;
-                    conexion.query('UPDATE levels SET lvl = ? WHERE id = ? AND idKey = ?', [res[0].lvl + res[0].lvl, id, key], (err, res) => {
+                    conexion.query('UPDATE levels SET lvl = ? WHERE id = ? AND idKey = ?', [res[0].lvl + 1, id, key], (err, res) => {
                         if (err) return reject(err);
                     });
 
