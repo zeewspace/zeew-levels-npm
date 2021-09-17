@@ -28,8 +28,12 @@ Este modulo esta creado para usar con mysql, ya que es te no explotara cuando lo
 
 Te recomiendo usar alwaysdata para tener una base de datos mysql de manera gratis.
 
-#ZeewDEV
+#ZeewDEV <br>
 #ZeewTEAM
+
+Recuerda que si encuentras algun error, quieres aportar con una donacion o con codigo, puedes ingresar a nuestro servidor de discord o nuestra cuenta de twitter, github.
+
+Si quieres ver un **ejemplo** puedes ir al github o ir a nuestra web.
 
 ## Como usarlo
 
@@ -81,6 +85,9 @@ zeewLevels.main.options({limitXP, maxXP});
 
 ### main: newLevel
 
+Esta es la funcion que debes colocar en el evento de mensajes para que suban de nivel. <br>
+Esta funcion tambien regresa el nivel subido.
+
 ```js
 zeewLevels.main.newLevel(id, key);
 ```
@@ -127,6 +134,8 @@ zeewLevels.delete.user(id, id);
 ```
 
 ### delete: All
+
+Este elimina todo los datos en la base de datos, ten cuidado.
 
 ```js
  zeewLevels.delete.all(key);
