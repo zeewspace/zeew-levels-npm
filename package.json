@@ -8,7 +8,10 @@
   "author": "kamerr ezz - <developer@kamerrezz.com>",
   "license": "Copyleft",
   "private": false,
-  "dependencies": {},
+  "dependencies": {
+    "deepmerge": "^4.2.2",
+    "quick.db": "^7.1.3"
+  },
   "devDependencies": {},
   "keywords": [
     "Zeew",
