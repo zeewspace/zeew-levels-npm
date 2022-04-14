@@ -3,7 +3,7 @@ const getMaximumXP = (lvl) => {
   };
   
   const formulateTheXp = (t_1, t_2, n) => {
-    var b = this.getMaximumXP(t_2) - t_1;
+    var b = getMaximumXP(t_2) - t_1;
     var a = 220;
   
     return t_1 * n + b * ((n * (n - 1)) / 2) + a * ((n * (n - 1) * (n - 2)) / 6);
@@ -13,28 +13,28 @@ const getMaximumXP = (lvl) => {
     var new_xp = xp + more_xp;
     var new_lvl = Math.floor(Math.sqrt(new_xp / 110));
   
-    if (new_xp >= this.getMaximumXP(lvl)) {
+    if (new_xp >= getMaximumXP(lvl)) {
       var leveled = new_lvl;
       if (lvl === new_lvl) leveled++;
   
       var n = (new_lvl - lvl) / 1 + 1;
   
       var remain_xp = Math.abs(
-        new_xp - this.formulateTheXp(this.getMaximumXP(lvl), lvl + 1, n)
+        new_xp - formulateTheXp(getMaximumXP(lvl), lvl + 1, n)
       );
-      if (remain_xp >= this.getMaximumXP(leveled)) {
+      if (remain_xp >= getMaximumXP(leveled)) {
         remain_xp = Math.abs(
-          new_xp - this.formulateTheXp(this.getMaximumXP(lvl), lvl + 1, n - 1)
+          new_xp - formulateTheXp(getMaximumXP(lvl), lvl + 1, n - 1)
         );
         leveled = leveled - 1;
       }
       return {
         new_xp: remain_xp,
         new_lvl: leveled,
-        new_max_xp: this.getMaximumXP(l),
+        new_max_xp: getMaximumXP(l),
       };
     } else {
-      return { new_xp: new_xp, new_lvl: lvl, new_max_xp: this.getMaximumXP(l) };
+      return { new_xp: new_xp, new_lvl: lvl, new_max_xp: getMaximumXP(l) };
     }
   };
   
