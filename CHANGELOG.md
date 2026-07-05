@@ -7,6 +7,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.1] - 2026-07-05
+
+### Added
+- **Modular architecture guide** — patterns for bots with src/commands, src/events, src/utils structure
+- **Comprehensive documentation** — 16 files covering API reference, guides, and examples optimized for RAG indexing
+- **Singleton pattern** for zeew-levels instances in modular bots (`getLevels()`)
+- **Command handler pattern** — dynamic loading of commands from filesystem
+- **Event handler pattern** — dynamic loading of events with `Events.*` constants
+
+### Changed
+- All documentation updated to **discord.js v14.26** patterns:
+  - `Events.ClientReady`, `Events.MessageCreate`, `Events.InteractionCreate`, `Events.VoiceStateUpdate` constants instead of string literals
+  - `new REST({ version: "10" })` with explicit API version
+  - `MessageFlags.Ephemeral` for ephemeral replies
+  - Deploy commands as separate script pattern
+- Bilingual README — Spanish first, English second
+
+### Documentation
+- `docs/README.md` — Index and navigation
+- `docs/getting-started.md` — Installation and first steps
+- `docs/adapters.md` — All 6 adapters with schemas and performance comparison
+- `docs/api/core.md` — Full ZeewLevels class API reference
+- `docs/api/types.md` — All TypeScript types with examples
+- `docs/api/cache.md` — LRU cache configuration and behavior
+- `docs/api/multipliers.md` — XP multipliers by role, boost, guild
+- `docs/api/cooldowns.md` — Anti-spam cooldown system
+- `docs/api/rewards.md` — Level-up reward system
+- `docs/api/prestige.md` — Prestige system configuration
+- `docs/api/stats.md` — Statistics and utilities
+- `docs/api/discord.md` — Discord.js helpers (rankCard, leaderboardEmbed, etc.)
+- `docs/guides/modular-architecture.md` — Modular bot patterns
+- `docs/guides/discordjs.md` — Discord.js integration guide
+- `docs/guides/migration-v1.md` — v1 to v2 migration
+- `docs/guides/custom-adapter.md` — Custom adapter implementation (Supabase example)
+- `docs/guides/best-practices.md` — Performance and security tips
+- `docs/examples/basic-bot.md` — Minimal working bot
+- `docs/examples/premium-bot.md` — Full-featured bot with all features
+- `docs/examples/testing.md` — Testing patterns with MemoryAdapter
+
 ## [2.1.0] - 2026-07-05
 
 ### Added
@@ -75,7 +114,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `conexion()`, `main.newLevel()`, `get.Level()`, `get.XP()`, `get.TOP()`
 - `set.Level()`, `set.XP()`, `delete.user()`, `delete.all()`
 
-[Unreleased]: https://github.com/zeewspace/zeew-levels-npm/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/zeewspace/zeew-levels-npm/compare/v2.1.1...HEAD
+[2.1.1]: https://github.com/zeewspace/zeew-levels-npm/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/zeewspace/zeew-levels-npm/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/zeewspace/zeew-levels-npm/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/zeewspace/zeew-levels-npm/releases/tag/v1.0.0
