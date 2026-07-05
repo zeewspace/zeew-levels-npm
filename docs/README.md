@@ -24,10 +24,11 @@
 
 ### Guías
 
-- [Migración de v1 a v2](./guides/migration-v1.md)
-- [Integración con Discord.js](./guides/discordjs.md)
-- [Crear Adaptador Personalizado](./guides/custom-adapter.md)
-- [Mejores Prácticas y Performance](./guides/best-practices.md)
+- [Arquitectura Modular](./guides/modular-architecture.md) — Bots con src/commands, src/events, src/utils
+- [Integración con Discord.js](./guides/discordjs.md) — Setup completo paso a paso
+- [Migración de v1 a v2](./guides/migration-v1.md) — Guía de migración
+- [Crear Adaptador Personalizado](./guides/custom-adapter.md) — Ejemplo con Supabase
+- [Mejores Prácticas y Performance](./guides/best-practices.md) — Optimización y seguridad
 
 ### Ejemplos
 
