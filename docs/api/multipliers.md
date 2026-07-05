@@ -107,7 +107,7 @@ await levels.addMultiplier("guild-2", { id: "boost", value: 1.5, source: "boost"
 
 ```typescript
 // Configurar multiplicadores al iniciar el bot
-client.on("ready", async () => {
+client.once(Events.ClientReady, async () => {
   for (const guild of client.guilds.cache.values()) {
     // 2x XP para rol VIP
     await levels.addMultiplier(guild.id, {
@@ -127,7 +127,7 @@ client.on("ready", async () => {
 });
 
 // En messageCreate, pasar los roles del usuario
-client.on("messageCreate", async (message) => {
+client.on(Events.MessageCreate, async (message) => {
   if (message.author.bot || !message.guild) return;
 
   const userRoles = message.member.roles.cache.map(r => r.id);

@@ -103,7 +103,7 @@ const stats = await levels.getUserStats(user, guild);
 
 ```typescript
 // ❌ MAL — Todo en un archivo
-client.on("messageCreate", async (message) => {
+client.on(Events.MessageCreate, async (message) => {
   // 200 líneas de lógica
 });
 
@@ -121,8 +121,8 @@ export async function handleRank(interaction: ChatInputCommandInteraction, level
 }
 
 // index.ts
-client.on("messageCreate", (message) => handleMessage(message, levels));
-client.on("interactionCreate", (interaction) => handleInteraction(interaction, levels));
+client.on(Events.MessageCreate, (message) => handleMessage(message, levels));
+client.on(Events.InteractionCreate, (interaction) => handleInteraction(interaction, levels));
 ```
 
 ### Patrón: Singleton de Levels
@@ -156,8 +156,8 @@ export function getLevels(): ZeewLevels {
 
 ```typescript
 // Configurar multiplicadores y recompensas al iniciar
-client.on("ready", async () => {
-  for (const guild of client.guilds.cache.values()) {
+client.once(Events.ClientReady, async (readyClient) => {
+  for (const guild of readyClient.guilds.cache.values()) {
     // Cargar configuración desde un JSON o DB
     const config = await loadGuildConfig(guild.id);
 

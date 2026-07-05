@@ -71,8 +71,8 @@ const levels = new ZeewLevels(adapter, {
 });
 
 // ─── Inicializar ───────────────────────────────────────
-client.once("ready", async () => {
-  console.log(`✅ Bot listo como ${client.user?.tag}`);
+client.once(Events.ClientReady, async (readyClient) => {
+  console.log(`✅ Bot listo como ${readyClient.user.tag}`);
 
   // Init DB
   await levels.init();
@@ -149,7 +149,7 @@ async function registerCommands() {
       ),
   ];
 
-  const rest = new REST().setToken(TOKEN);
+  const rest = new REST({ version: "10" }).setToken(TOKEN);
   await rest.put(Routes.applicationCommands(CLIENT_ID), {
     body: commands.map((c) => c.toJSON()),
   });
@@ -158,7 +158,7 @@ async function registerCommands() {
 }
 
 // ─── Evento de Mensaje ─────────────────────────────────
-client.on("messageCreate", async (message) => {
+client.on(Events.MessageCreate, async (message) => {
   if (message.author.bot || !message.guild) return;
 
   const userRoles = message.member?.roles.cache.map((r) => r.id) ?? [];
@@ -188,7 +188,7 @@ client.on("messageCreate", async (message) => {
 });
 
 // ─── Evento de Interacción ─────────────────────────────
-client.on("interactionCreate", async (interaction) => {
+client.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
   if (!interaction.guild) return;
 
@@ -358,7 +358,7 @@ client.on("interactionCreate", async (interaction) => {
 // ─── Voz (XP por actividad) ────────────────────────────
 const voiceCooldown = new Map<string, number>();
 
-client.on("voiceStateUpdate", async (oldState, newState) => {
+client.on(Events.VoiceStateUpdate, async (oldState, newState) => {
   const userId = newState.member?.id;
   const guildId = newState.guild.id;
   if (!userId || !guildId) return;

@@ -93,7 +93,7 @@ levels.onPrestige = (user, guild, newPrestige) => {
 ## Ejemplo Completo: Comando /prestige
 
 ```typescript
-client.on("interactionCreate", async (interaction) => {
+client.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
   if (interaction.commandName !== "prestige") return;
 

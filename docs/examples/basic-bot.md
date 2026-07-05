@@ -28,11 +28,11 @@ const levels = new ZeewLevels(adapter, {
 });
 
 // ─── Eventos ───────────────────────────────────────────
-client.once("ready", () => {
+client.once(Events.ClientReady, () => {
   console.log(`✅ Bot listo como ${client.user?.tag}`);
 });
 
-client.on("messageCreate", async (message) => {
+client.on(Events.MessageCreate, async (message) => {
   if (message.author.bot) return;
   if (!message.guild) return;
 
@@ -53,7 +53,7 @@ client.on("messageCreate", async (message) => {
   }
 });
 
-client.on("interactionCreate", async (interaction) => {
+client.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
   if (!interaction.guild) return;
 

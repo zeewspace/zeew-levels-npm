@@ -140,9 +140,10 @@ rankSuffix(21);  // "21st"
 ## Ejemplo: Comando /rank
 
 ```typescript
+import { Events } from "discord.js";
 import { rankCard, formatXp, progressBar } from "zeew-levels";
 
-client.on("interactionCreate", async (interaction) => {
+client.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
   if (interaction.commandName !== "rank") return;
 
@@ -184,9 +185,10 @@ client.on("interactionCreate", async (interaction) => {
 ## Ejemplo: Comando /leaderboard
 
 ```typescript
+import { Events } from "discord.js";
 import { leaderboardEmbed } from "zeew-levels";
 
-client.on("interactionCreate", async (interaction) => {
+client.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
   if (interaction.commandName !== "leaderboard") return;
 

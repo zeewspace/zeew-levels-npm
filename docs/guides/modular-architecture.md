@@ -139,7 +139,7 @@ export async function loadCommands(client: Client): Promise<void> {
   }
 
   // Registrar comandos en Discord
-  const rest = new REST().setToken(env.DISCORD_TOKEN);
+  const rest = new REST({ version: "10" }).setToken(env.DISCORD_TOKEN);
   await rest.put(Routes.applicationCommands(env.CLIENT_ID), {
     body: commands,
   });
@@ -221,12 +221,12 @@ start();
 
 ```typescript
 // src/events/ready.ts
-import { Client } from "discord.js";
+import { Events, Client } from "discord.js";
 import { getLevels } from "../utils/levels";
 import { env } from "../config/env";
 
 export default {
-  name: "ready",
+  name: Events.ClientReady,
   once: true,
   async execute(client: Client) {
     console.log(`✅ Bot listo como ${client.user?.tag}`);
@@ -271,11 +271,11 @@ export default {
 
 ```typescript
 // src/events/messageCreate.ts
-import { Message } from "discord.js";
+import { Events, Message, EmbedBuilder } from "discord.js";
 import { getLevels } from "../utils/levels";
 
 export default {
-  name: "messageCreate",
+  name: Events.MessageCreate,
   once: false,
   async execute(message: Message) {
     if (message.author.bot) return;
@@ -321,11 +321,11 @@ export default {
 
 ```typescript
 // src/events/interactionCreate.ts
-import { Interaction } from "discord.js";
+import { Events, Interaction, MessageFlags } from "discord.js";
 import { getLevels } from "../utils/levels";
 
 export default {
-  name: "interactionCreate",
+  name: Events.InteractionCreate,
   once: false,
   async execute(interaction: Interaction) {
     if (!interaction.isChatInputCommand()) return;
@@ -364,13 +364,13 @@ export default {
 
 ```typescript
 // src/events/voiceStateUpdate.ts
-import { VoiceState } from "discord.js";
+import { Events, VoiceState } from "discord.js";
 import { getLevels } from "../utils/levels";
 
 const voiceCooldown = new Map<string, number>();
 
 export default {
-  name: "voiceStateUpdate",
+  name: Events.VoiceStateUpdate,
   once: false,
   async execute(oldState: VoiceState, newState: VoiceState) {
     const userId = newState.member?.id;

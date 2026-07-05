@@ -216,7 +216,7 @@ const levels = new ZeewLevels(adapter, {
 });
 
 // Evento de mensaje
-client.on("messageCreate", async (message) => {
+client.on(Events.MessageCreate, async (message) => {
   if (message.author.bot || !message.guild) return;
 
   const result = await levels.processMessage(
@@ -244,7 +244,7 @@ client.on("messageCreate", async (message) => {
 });
 
 // Comando /rank
-client.on("interactionCreate", async (interaction) => {
+client.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
 
   if (interaction.commandName === "rank") {

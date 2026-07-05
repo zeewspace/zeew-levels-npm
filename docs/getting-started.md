@@ -60,7 +60,7 @@ await levels.init(); // Crea tablas/colecciones si no existen
 
 ```typescript
 // En el evento messageCreate de Discord.js
-client.on("messageCreate", async (message) => {
+client.on(Events.MessageCreate, async (message) => {
   if (message.author.bot) return;
   if (!message.guild) return;
 

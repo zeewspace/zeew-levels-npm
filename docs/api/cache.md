@@ -59,7 +59,7 @@ const levels = new ZeewLevels(adapter, {
 });
 
 // Estas llamadas son ultrarrápidas después de la primera
-client.on("interactionCreate", async (interaction) => {
+client.on(Events.InteractionCreate, async (interaction) => {
   if (interaction.commandName === "rank") {
     const stats = await levels.getUserStats(
       interaction.user.id,

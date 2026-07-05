@@ -106,7 +106,7 @@ await levels.rewards.clearRewards(guild);
 
 ```typescript
 // Configurar recompensas al iniciar
-client.on("ready", async () => {
+client.once(Events.ClientReady, async () => {
   const guild = client.guilds.cache.first();
   if (!guild) return;
 
@@ -147,7 +147,7 @@ client.on("ready", async () => {
 });
 
 // Procesar mensajes
-client.on("messageCreate", async (message) => {
+client.on(Events.MessageCreate, async (message) => {
   if (message.author.bot || !message.guild) return;
 
   const result = await levels.processMessage(
