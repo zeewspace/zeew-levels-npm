@@ -1,21 +1,85 @@
 {
   "name": "zeew-levels",
-  "version": "1.0.0",
-  "description": "NPM de niveles para creadores de bots de discord.js u otros en español - #ZeewDev",
-  "main": "index.js",
-  "repository": "https://github.com/KamerrEzz/zeew-levels-npm",
+  "version": "2.0.0",
+  "description": "Database-agnostic leveling system for Discord bots — JSON, SQLite, MySQL, MongoDB, Redis",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/cjs/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig.esm.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "prepublishOnly": "npm run build",
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KamerrEzz/zeew-levels-npm.git"
+  },
   "homepage": "https://zeew.dev",
   "author": "kamerr ezz - <developer@kamerrezz.com>",
-  "license": "Copyleft",
+  "license": "PolyForm-Noncommercial-1.0.0",
   "private": false,
-  "dependencies": {},
-  "devDependencies": {},
   "keywords": [
-    "Zeew",
-    "ZeewApi",
-    "ZeewNiveles",
-    "Discord.js Niveles",
-    "Niveles bots discord",
-    "discord niveles español"
-  ]
+    "discord.js",
+    "levels",
+    "xp",
+    "leveling",
+    "typescript",
+    "sqlite",
+    "json",
+    "mysql",
+    "mongodb",
+    "redis",
+    "zeew",
+    "leaderboard",
+    "bot"
+  ],
+  "peerDependencies": {
+    "better-sqlite3": ">=9.0.0",
+    "mysql2": ">=3.0.0",
+    "mongodb": ">=5.0.0",
+    "ioredis": ">=5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "better-sqlite3": {
+      "optional": true
+    },
+    "mysql2": {
+      "optional": true
+    },
+    "mongodb": {
+      "optional": true
+    },
+    "ioredis": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.0",
+    "vitest": "^4.1.9"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }
