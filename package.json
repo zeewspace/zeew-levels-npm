@@ -1,6 +1,6 @@
 {
   "name": "zeew-levels",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Database-agnostic leveling system for Discord bots — JSON, SQLite, MySQL, MongoDB, Redis",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
