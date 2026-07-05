@@ -1,142 +1,222 @@
-# ¡Zeew Levels!
+# zeew-levels
 
-![Zeew Api](https://i.imgur.com/MP2bABn.png "Lo Mejor de Zeew")
-- [¡Zeew Levels!](#zeew-levels)
-  - [Informacion](#informacion)
-  - [Como usarlo](#como-usarlo)
-- [Metodos](#metodos)
-  - [Principal](#principal)
-    - [main: options](#main-options)
-    - [main: newLevel](#main-newlevel)
-  - [Obtener](#obtener)
-    - [Get: Level](#get-level)
-    - [Get: XP](#get-xp)
-    - [Get: TOP](#get-top)
-  - [Agregar](#agregar)
-    - [set: Level](#set-level)
-    - [set: XP](#set-xp)
-  - [Eliminar](#eliminar)
-    - [delete: User](#delete-user)
-    - [delete: All](#delete-all)
+> Database-agnostic leveling system for Discord bots — JSON, SQLite, MySQL, MongoDB, Redis
 
+[![npm](https://img.shields.io/npm/v/zeew-levels)](https://www.npmjs.com/package/zeew-levels)
+[![license](https://img.shields.io/npm/l/zeew-levels)](LICENSE)
 
-## Informacion
+---
 
-Yo se que quieres un sistema de niveles para tu bot de discord o tu app, a si que he pensando en ti 7w7 y he hecho este modulo.
+## Instalación
 
-Este modulo esta creado para usar con mysql, ya que es te no explotara cuando los datos sean demaciados.
+```bash
+npm install zeew-levels
+```
 
-Te recomiendo usar alwaysdata para tener una base de datos mysql de manera gratis.
+Los adaptadores de base de datos son **peer dependencies opcionales**. Instala solo el que necesites:
 
-#ZeewDEV <br>
-#ZeewTEAM
+```bash
+# JSON (sin dependencias extra — ya incluido)
+# SQLite
+npm install better-sqlite3
+# MySQL
+npm install mysql2
+# MongoDB
+npm install mongodb
+# Redis
+npm install ioredis
+```
 
-Recuerda que si encuentras algun error, quieres aportar con una donacion o con codigo, puedes ingresar a nuestro servidor de discord o nuestra cuenta de twitter, github.
+---
 
-Si quieres ver un **ejemplo** puedes ir al github o ir a nuestra web.
+## Inicio rápido
 
-## Como usarlo
+### JSON (archivo en disco)
 
-Todas las funciones de zeew levels son `asyncronos`, a si que no olvides el `await` y `async`
+```typescript
+import { ZeewLevels, JsonAdapter } from "zeew-levels";
 
-Primero debes hacer la conexion de mysql, te recomiendo usar mysql2.
-A qui te dejo el ejemplo. Se lo que necesitaras.
+const adapter = new JsonAdapter("./levels.json");
+const levels = new ZeewLevels(adapter);
 
-```js
-const mysql = require('mysql2');
+// En tu evento de mensaje
+const result = await levels.processMessage(message.author.id, message.guild.id);
 
-const conexionMYSQL = mysql.createConnection({
-    host,
-    user,
-    database
+if (result.type === "level_up") {
+  message.channel.send(`¡${message.author} subió al nivel ${result.newLevel}!`);
+}
+```
+
+### SQLite
+
+```typescript
+import { ZeewLevels, SqliteAdapter } from "zeew-levels";
+
+const adapter = new SqliteAdapter("./levels.db");
+const levels = new ZeewLevels(adapter);
+
+const result = await levels.processMessage(message.author.id, message.guild.id);
+```
+
+### MySQL
+
+```typescript
+import { ZeewLevels, MysqlAdapter } from "zeew-levels";
+
+const adapter = new MysqlAdapter({
+  host: "localhost",
+  user: "root",
+  password: "password",
+  database: "mybot",
+});
+
+const levels = new ZeewLevels(adapter);
+await levels.init(); // Crea la tabla si no existe
+```
+
+### MongoDB
+
+```typescript
+import { ZeewLevels, MongoAdapter } from "zeew-levels";
+
+const adapter = new MongoAdapter("mongodb://localhost:27017", "mybot");
+const levels = new ZeewLevels(adapter);
+await levels.init();
+```
+
+### Redis
+
+```typescript
+import { ZeewLevels, RedisAdapter } from "zeew-levels";
+import Redis from "ioredis";
+
+const redis = new Redis();
+const adapter = new RedisAdapter(redis);
+const levels = new ZeewLevels(adapter);
+```
+
+---
+
+## Configuración
+
+```typescript
+const levels = new ZeewLevels(adapter, {
+  xpPerMessage: { min: 1, max: 5 },  // XP aleatorio por mensaje (default: 1-5)
+  levelUpThreshold: 1000,             // XP necesaria para subir de nivel (default: 1000)
+  logger: console,                    // Logger opcional
 });
 ```
 
-Una vez que lo tengas, pasa la conexion de mysql a zeewlevels.
+---
 
-> `NOTA` Esta funcion solo debe existir una vez. Colocalo en el archivo principal.
-```js
-zeewLevels.conexion(conexionMYSQL)
+## API
+
+### Procesar mensajes
+
+```typescript
+const result = await levels.processMessage(user, guild);
+// result.type === "xp_gain"   → { type: "xp_gain", xp: number, totalXp: number }
+// result.type === "level_up"  → { type: "level_up", newLevel: number, xp: number }
 ```
 
-y ahora podras usar las funciones.
+### Agregar XP manual
 
-# Metodos
-
-La `key` es un indentificador. Por ejemplo la id del servidor, pero si sera global, pone algo que siempre tendran.
-
-La `id` es el indentifacdor del usuario.
-
-La `amount` es la cantidad que sera añadida o removida
-
-El `limit` es para obtener cierta cantidad de datos
-
-El `limitXP` es el limite de XP que necesita para que suba de nivel. Por defecto sera 1000.
-
-El `maxXP` el maximo de XP random que pueden obtener. Por defecto sera de 5.
-
-## Principal
-
-### main: options
-
-```js
-zeewLevels.main.options({limitXP, maxXP});
+```typescript
+const result = await levels.addXp(user, guild, 50);
 ```
 
-### main: newLevel
+### Obtener datos
 
-Esta es la funcion que debes colocar en el evento de mensajes para que suban de nivel. <br>
-Esta funcion tambien regresa el nivel subido.
-
-```js
-zeewLevels.main.newLevel(id, key);
+```typescript
+const level = await levels.getLevel(user, guild);   // number | null
+const xp = await levels.getXp(user, guild);         // number | null
+const user = await levels.getUser(user, guild);     // LevelRecord | null
+const leaderboard = await levels.getLeaderboard(guild, 10); // LeaderboardEntry[]
 ```
 
-## Obtener
+### Establecer datos
 
-### Get: Level
-
-```js
-zeewLevels.get.Level(id, key);
+```typescript
+await levels.setLevel(user, guild, 5);
+await levels.setXp(user, guild, 250);
 ```
 
-### Get: XP
+### Eliminar
 
-```js
-zeewLevels.get.XP(id, key);
+```typescript
+await levels.deleteUser(user, guild);
+await levels.deleteAll(guild);
 ```
 
-### Get: TOP
+### Hooks de eventos
 
-```js
-zeewLevels.get.TOP(key, limit);
+```typescript
+levels.onLevelUp = (user, guild, newLevel) => {
+  console.log(`${user} reached level ${newLevel} in ${guild}`);
+};
+
+levels.onXpGain = (user, guild, xp) => {
+  console.log(`${user} gained ${xp} xp in ${guild}`);
+};
 ```
 
-## Agregar
+---
 
-### set: Level
+## Adaptadores
 
-```js
-zeewLevels.set.Level(id , key, amount);
+| Adapter | Dependencia | Uso ideal |
+|---------|-------------|-----------|
+| `MemoryAdapter` | Ninguna | Testing, uso efímero |
+| `JsonAdapter` | Ninguna (fs) | Bots pequeños, prototipos |
+| `SqliteAdapter` | `better-sqlite3` | Producción single-server |
+| `MysqlAdapter` | `mysql2` | Producción, bases MySQL existentes |
+| `MongoAdapter` | `mongodb` | Bots grandes, multi-servidor |
+| `RedisAdapter` | `ioredis` | Alto rendimiento, escalable |
+
+### Crear tu propio adaptador
+
+Implementa la interfaz `LevelsAdapter`:
+
+```typescript
+import type { LevelsAdapter, UserKey, LevelRecord, LeaderboardEntry } from "zeew-levels";
+
+class MyAdapter implements LevelsAdapter {
+  async findUser(key: UserKey): Promise<LevelRecord | null> { /* ... */ }
+  async upsertUser(key: UserKey, xp: number, level: number): Promise<void> { /* ... */ }
+  async deleteUser(key: UserKey): Promise<void> { /* ... */ }
+  async getLeaderboard(guild: string, limit: number): Promise<LeaderboardEntry[]> { /* ... */ }
+  async allUsers(guild: string): Promise<LevelRecord[]> { /* ... */ }
+  async deleteAll(guild: string): Promise<void> { /* ... */ }
+}
 ```
 
-### set: XP
-```js
-zeewLevels.set.XP(id , key, amount);
-```
+---
 
-## Eliminar
+## Migración de v1 → v2
 
-### delete: User
+| v1 | v2 |
+|----|-----|
+| `zeewLevels.conexion(db)` | `new ZeewLevels(new JsonAdapter(...))` |
+| `zeewLevels.main.options({limitXP, maxXP})` | `new ZeewLevels(adapter, { levelUpThreshold, xpPerMessage })` |
+| `zeewLevels.main.newLevel(id, key)` | `await levels.processMessage(user, guild)` |
+| `zeewLevels.get.Level(id, key)` | `await levels.getLevel(user, guild)` |
+| `zeewLevels.get.XP(id, key)` | `await levels.getXp(user, guild)` |
+| `zeewLevels.set.Level(id, key, lvl)` | `await levels.setLevel(user, guild, level)` |
+| `zeewLevels.set.XP(id, key, xp)` | `await levels.setXp(user, guild, xp)` |
+| `zeewLevels.delete.user(id, key)` | `await levels.deleteUser(user, guild)` |
+| `zeewLevels.delete.all()` | `await levels.deleteAll(guild)` |
 
-```js
-zeewLevels.delete.user(id, id);
-```
+**Cambios importantes:**
+- Ya no se necesita `mysql2` — el adaptador por defecto es JSON
+- `processMessage()` retorna un resultado tipado en vez de `undefined`
+- `getLevel()` y `getXp()` retornan `null` en vez de `false`
+- `getLeaderboard()` se llama por guild, no por key global
+- Eliminados los bugs de SQL injection y promesas colgadas de v1
 
-### delete: All
+---
 
-Este elimina todo los datos en la base de datos, ten cuidado.
+## Licencia
 
-```js
- zeewLevels.delete.all(key);
-```
+[PolyForm Noncommercial License 1.0.0](LICENSE)
+
+#ZeewDev #ZeewTeam
